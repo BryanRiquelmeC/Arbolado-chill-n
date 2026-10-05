@@ -1,0 +1,15 @@
+# Datos y respaldos: NUNCA al repositorio
+base-de-datos/
+*.sql
+*.xlsx
+*.xls
+*.csv
+respaldo_*.json
+registros_*.csv
+censo_*.json
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.vscode/
+node_modules/

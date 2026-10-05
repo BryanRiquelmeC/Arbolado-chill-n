@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arbolado Urbano · Registro de Campo</title>
+    <meta name="theme-color" content="#0b5c8f" />
+    <meta
+      name="description"
+      content="Censo Arbolado Urbano 2026 – Croquis de perfil vial y Matriz VTA"
+    />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <aside id="side">
+      <button class="side-close" id="sideClose" type="button" aria-label="Cerrar menú">
+        <i data-i="x"></i>
+      </button>
+      <div class="brand">
+        <span class="logo"><i data-i="tree"></i></span>
+        <div>
+          <h1>Arbolado Urbano</h1>
+          <small>Registro de campo · Censo 2026</small>
+        </div>
+      </div>
+      <nav class="nav">
+        <button data-v="dash" class="on">
+          <i data-i="home"></i>
+          <span class="nt">
+            <b>Inicio</b>
+            <small>Resumen general</small>
+          </span>
+        </button>
+        <button data-v="croquis">
+          <i data-i="ruler"></i>
+          <span class="nt">
+            <b>Croquis</b>
+            <small>Perfil vial transversal</small>
+          </span>
+        </button>
+        <button data-v="encuesta">
+          <i data-i="clipboard"></i>
+          <span class="nt">
+            <b>Matriz VTA</b>
+            <small>Evaluación visual del árbol</small>
+          </span>
+        </button>
+        <button data-v="manzanas">
+          <i data-i="grid"></i>
+          <span class="nt">
+            <b>Manzanas</b>
+            <small>Árboles por manzana</small>
+          </span>
+        </button>
+        <button data-v="registros">
+          <i data-i="folder"></i>
+          <span class="nt">
+            <b>Registros</b>
+            <small>Buscar, ver y exportar</small>
+          </span>
+        </button>
+      </nav>
+      <div class="sync" id="sync">
+        <b>
+          <span class="dot" id="syncDot"></span>
+          <span id="syncTxt">Solo en este dispositivo</span>
+        </b>
+        <span id="syncSub"></span>
+        <button class="btn" id="syncBtn" type="button">
+          <i data-i="refresh"></i>
+          Sincronizar ahora
+        </button>
+      </div>
+      <div class="foot">
+        Firma responsable
+        <br />
+        <b>Rodolfo Gazmuri Sánchez</b>
+        <br />
+        Certificado en Arbolado Urbano
+        <div class="by">
+          by
+          <b>Victor Riquelme Cabrera</b>
+        </div>
+      </div>
+    </aside>
+    <div class="scrim" id="scrim"></div>
+
+    <main>
+      <!-- ===== PANEL ===== -->
+      <section class="view on" id="v-dash">
+        <div class="top">
+          <div>
+            <button class="menu" aria-label="Menú"><i data-i="menu"></i></button>
+            <h2>Panel principal</h2>
+            <p>Seleccione un módulo para comenzar un registro</p>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <b id="st-total">0</b>
+            <span>Registros totales</span>
+          </div>
+          <div class="stat">
+            <b id="st-cro">0</b>
+            <span>Croquis perfil vial</span>
+          </div>
+          <div class="stat">
+            <b id="st-enc">0</b>
+            <span>Matriz VTA</span>
+          </div>
+          <div class="stat">
+            <b id="st-cen">0</b>
+            <span>Censo importado (Excel)</span>
+          </div>
+          <div class="stat">
+            <b id="st-mz">0</b>
+            <span>Manzanas registradas</span>
+          </div>
+        </div>
+        <div class="mods">
+          <div class="mod" data-go="croquis">
+            <div class="ic"><i data-i="ruler"></i></div>
+            <h4>Croquis de perfil vial</h4>
+            <p>
+              Corte transversal: anchos de vereda, platabanda y calzada, cables, tránsito y datos
+              del árbol.
+            </p>
+          </div>
+          <div class="mod" data-go="encuesta">
+            <div class="ic"><i data-i="clipboard"></i></div>
+            <h4>Formulario de evaluación</h4>
+            <p>
+              Censo Arbolado Urbano 2026 – Matriz VTA (Evaluación Visual del Árbol): 40 preguntas en
+              6 secciones, con fotos y GPS.
+            </p>
+          </div>
+          <div class="mod" data-go="manzanas">
+            <div class="ic"><i data-i="grid"></i></div>
+            <h4>Manzanas</h4>
+            <p>
+              Todos los árboles organizados por manzana: resumen, especies, urgencias e informe PDF
+              por manzana.
+            </p>
+          </div>
+          <div class="mod" data-go="registros">
+            <div class="ic"><i data-i="folder"></i></div>
+            <h4>Registros y reportes</h4>
+            <p>
+              Buscar y filtrar por dirección, manzana, especie, urgencia o fecha; editar, respaldar
+              y exportar a PDF o CSV.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== CROQUIS ===== -->
+      <section class="view" id="v-croquis">
+        <div class="top">
+          <div>
+            <button class="menu" aria-label="Menú"><i data-i="menu"></i></button>
+            <h2>Croquis de perfil vial (corte transversal)</h2>
+            <p>
+              Los campos con
+              <span style="color: var(--err)">*</span>
+              son obligatorios
+            </p>
+          </div>
+        </div>
+        <form id="f-croquis" autocomplete="off">
+          <input type="hidden" name="_id" />
+          <div class="card">
+            <h3>
+              <i data-i="pin"></i>
+              Identificación
+            </h3>
+            <div class="grid">
+              <div class="f" style="grid-column: span 2">
+                <label>
+                  Dirección
+                  <span class="req">*</span>
+                </label>
+                <div data-gps="direccion" data-req="1"></div>
+              </div>
+              <div class="f">
+                <label>Manzana / Lote</label>
+                <input type="text" name="manzana" placeholder="Ej: 92" />
+              </div>
+              <div class="f">
+                <label>Fecha</label>
+                <input type="date" name="fecha" />
+              </div>
+              <div class="f">
+                <label>Km inicial</label>
+                <input type="text" name="km_inicial" placeholder="Ej: 7887" />
+              </div>
+              <div class="f">
+                <label>N° registro / código</label>
+                <input type="text" name="registro" placeholder="Ej: R53" />
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>
+              <i data-i="zap"></i>
+              Red eléctrica y tránsito
+            </h3>
+            <div class="grid">
+              <div class="f">
+                <label>Cables eléctricos aéreos</label>
+                <div class="chips">
+                  <label>
+                    <input type="radio" name="cables" value="Sí" />
+                    Sí
+                  </label>
+                  <label>
+                    <input type="radio" name="cables" value="No" />
+                    No
+                  </label>
+                </div>
+              </div>
+              <div class="f" id="postes-wrap" style="grid-column: span 2">
+                <label>Postes / red ubicados en (puede marcar ambos)</label>
+                <div class="chips">
+                  <label>
+                    <input type="checkbox" name="postes" value="Platabanda izq." />
+                    <i data-i="left"></i>
+                    Platabanda izquierda
+                  </label>
+                  <label>
+                    <input type="checkbox" name="postes" value="Platabanda der." />
+                    Platabanda derecha
+                    <i data-i="right"></i>
+                  </label>
+                </div>
+              </div>
+              <div class="f" id="alt-izq">
+                <label>Altura mín. cables – lado izq.</label>
+                <div class="unit">
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    name="altura_cables_izq"
+                    placeholder="4.10"
+                  />
+                  <span>m</span>
+                </div>
+              </div>
+              <div class="f" id="alt-der">
+                <label>Altura mín. cables – lado der.</label>
+                <div class="unit">
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    name="altura_cables_der"
+                    placeholder="4.10"
+                  />
+                  <span>m</span>
+                </div>
+              </div>
+              <input type="hidden" name="altura_cables" />
+              <div class="f">
+                <label>Sentido del tránsito</label>
+                <div class="chips">
+                  <label>
+                    <input type="radio" name="sentido" value="Unidireccional" />
+                    Unidireccional
+                  </label>
+                  <label>
+                    <input type="radio" name="sentido" value="Bidireccional" />
+                    Bidireccional
+                  </label>
+                </div>
+              </div>
+              <div class="f" style="grid-column: span 2">
+                <label>Dirección del flujo</label>
+                <div class="chips">
+                  <label>
+                    <input type="radio" name="flujo" value="O a P" />
+                    O a P
+                  </label>
+                  <label>
+                    <input type="radio" name="flujo" value="P a O" />
+                    P a O
+                  </label>
+                  <label>
+                    <input type="radio" name="flujo" value="N a S" />
+                    N a S
+                  </label>
+                  <label>
+                    <input type="radio" name="flujo" value="S a N" />
+                    S a N
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>
+              <i data-i="ruler"></i>
+              Perfil transversal (anchos)
+            </h3>
+            <div class="croquis"><svg id="svg" viewBox="0 0 1000 300"></svg></div>
+            <div class="perfil-lim">
+              <span>
+                <i data-i="left"></i>
+                Límite oficial izq.
+              </span>
+              <span>
+                Límite oficial der.
+                <i data-i="right"></i>
+              </span>
+            </div>
+            <div class="perfil">
+              <div class="pcol">
+                <div class="ptit">Vereda izq.</div>
+                <div class="unit">
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    name="vereda_izq"
+                    class="w"
+                    placeholder="0.00"
+                  />
+                  <span>m</span>
+                </div>
+              </div>
+              <div class="pcol pl">
+                <div class="ptit">Platabanda izq.</div>
+                <div class="unit">
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    name="plata_izq"
+                    class="w"
+                    placeholder="0.00"
+                  />
+                  <span>m</span>
+                </div>
+                <select name="mat_plata_izq" aria-label="Material">
+                  <option value="">Material…</option>
+                  <option>Tierra</option>
+                  <option>Césped</option>
+                  <option>Cemento</option>
+                  <option>Baldosa</option>
+                  <option>Ripio</option>
+                  <option>Otro</option>
+                </select>
+              </div>
+              <div class="pcol cz">
+                <div class="ptit">
+                  Calzada
+                  <small>de solera a solera</small>
+                </div>
+                <div class="unit">
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    name="calzada"
+                    class="w"
+                    placeholder="0.00"
+                  />
+                  <span>m</span>
+                </div>
+              </div>
+              <div class="pcol pl">
+                <div class="ptit">Platabanda der.</div>
+                <div class="unit">
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    name="plata_der"
+                    class="w"
+                    placeholder="0.00"
+                  />
+                  <span>m</span>
+                </div>
+                <select name="mat_plata_der" aria-label="Material">
+                  <option value="">Material…</option>
+                  <option>Tierra</option>
+                  <option>Césped</option>
+                  <option>Cemento</option>
+                  <option>Baldosa</option>
+                  <option>Ripio</option>
+                  <option>Otro</option>
+                </select>
+              </div>
+              <div class="pcol">
+                <div class="ptit">Vereda der.</div>
+                <div class="unit">
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    name="vereda_der"
+                    class="w"
+                    placeholder="0.00"
+                  />
+                  <span>m</span>
+                </div>
+              </div>
+            </div>
+            <div class="perfil-pie">
+              <div class="total">
+                Ancho total entre líneas oficiales:
+                <span id="tot">0.00</span>
+                m
+              </div>
+              <div class="f" style="min-width: 220px">
+                <label>Ubicación del árbol</label>
+                <select name="ubic_arbol">
+                  <option value="">—</option>
+                  <option>Vereda izq.</option>
+                  <option>Platabanda izq.</option>
+                  <option>Platabanda der.</option>
+                  <option>Vereda der.</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>🌳 Datos del árbol</h3>
+            <div class="grid">
+              <div class="f">
+                <label>Testigo – diámetro</label>
+                <div class="unit">
+                  <input type="number" step="0.1" name="testigo_diam" placeholder="6" />
+                  <span>cm</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>Testigo – altura medición</label>
+                <div class="unit">
+                  <input type="number" step="0.01" name="testigo_alt" placeholder="1.30" />
+                  <span>m</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>DAP</label>
+                <div class="unit">
+                  <input type="number" step="0.1" name="dap" placeholder="56" />
+                  <span>cm</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>Altura de copa</label>
+                <div class="unit">
+                  <input type="number" step="0.01" name="altura_copa" placeholder="12.6" />
+                  <span>m</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>Distancia (D)</label>
+                <div class="unit">
+                  <input type="number" step="0.01" name="distancia_d" placeholder="1.8" />
+                  <span>m</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>Proyección copa Norte</label>
+                <div class="unit">
+                  <input type="number" step="0.01" name="copa_n" placeholder="3.5" />
+                  <span>m</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>Proyección copa Sur</label>
+                <div class="unit">
+                  <input type="number" step="0.01" name="copa_s" placeholder="3.05" />
+                  <span>m</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>Inclinación</label>
+                <div class="unit">
+                  <input type="number" step="0.1" name="inclinacion" placeholder="12" />
+                  <span>°</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>Orientación inclinación</label>
+                <select name="orient_incl">
+                  <option value="">—</option>
+                  <option>N</option>
+                  <option>S</option>
+                  <option>O</option>
+                  <option>P</option>
+                  <option>NO</option>
+                  <option>NP</option>
+                  <option>SO</option>
+                  <option>SP</option>
+                </select>
+              </div>
+              <div class="f">
+                <label>Altura punto de inclinación</label>
+                <div class="unit">
+                  <input type="number" step="0.01" name="alt_incl" placeholder="1.4" />
+                  <span>m</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>Ancho base / cuello</label>
+                <div class="unit">
+                  <input type="number" step="0.1" name="base_ancho" placeholder="45" />
+                  <span>cm</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>Profundidad / raíz</label>
+                <div class="unit">
+                  <input type="number" step="0.1" name="raiz" placeholder="30" />
+                  <span>cm</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>Medida tronco</label>
+                <div class="unit">
+                  <input type="number" step="0.1" name="med_tronco" placeholder="31" />
+                  <span>cm</span>
+                </div>
+              </div>
+              <div class="f">
+                <label>Medida adicional</label>
+                <div class="unit">
+                  <input type="number" step="0.1" name="med_adic" placeholder="8" />
+                  <span>cm</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>
+              <i data-i="notes"></i>
+              Notas de campo / observaciones
+            </h3>
+            <div class="f">
+              <textarea name="notas" placeholder="Observaciones adicionales…"></textarea>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="button" class="btn bs" data-reset="croquis">Limpiar</button>
+            <button type="submit" class="btn bs">
+              <i data-i="save"></i>
+              Guardar
+            </button>
+            <button type="submit" class="btn bp" data-pdf="1">
+              <i data-i="pdf"></i>
+              Guardar y generar PDF
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ===== ENCUESTA (Google Form) ===== -->
+      <section class="view" id="v-encuesta">
+        <div class="top">
+          <div>
+            <button class="menu" aria-label="Menú"><i data-i="menu"></i></button>
+            <h2 id="enc-title">Formulario de evaluación</h2>
+            <p>
+              Los campos con
+              <span style="color: var(--err)">*</span>
+              son obligatorios
+            </p>
+          </div>
+        </div>
+        <form id="f-encuesta" autocomplete="off">
+          <input type="hidden" name="_id" />
+          <div class="intro" id="enc-intro"></div>
+          <nav class="secnav" id="enc-nav"></nav>
+          <div id="enc-body"></div>
+          <div class="actions">
+            <button type="button" class="btn bs" data-reset="encuesta">Limpiar</button>
+            <button type="submit" class="btn bs">
+              <i data-i="save"></i>
+              Guardar
+            </button>
+            <button type="submit" class="btn bp" data-pdf="1">
+              <i data-i="pdf"></i>
+              Guardar y generar PDF
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- ===== MANZANAS ===== -->
+      <section class="view" id="v-manzanas">
+        <div class="top">
+          <div>
+            <button class="menu" aria-label="Menú"><i data-i="menu"></i></button>
+            <h2>Registros por manzana</h2>
+            <p>Árboles agrupados por manzana con su resumen técnico</p>
+          </div>
+          <input type="text" id="mzq" class="search" placeholder="Buscar manzana…" />
+        </div>
+        <div class="mzgrid" id="mzgrid"></div>
+      </section>
+
+      <!-- ===== REGISTROS ===== -->
+      <section class="view" id="v-registros">
+        <div class="top">
+          <div>
+            <button class="menu" aria-label="Menú"><i data-i="menu"></i></button>
+            <h2>Registros guardados</h2>
+            <p>Croquis y Matriz VTA almacenados en este dispositivo</p>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <button class="btn bs sm" id="exp">
+              <i data-i="download"></i>
+              Respaldo
+            </button>
+            <label class="btn bp sm" style="margin: 0">
+              <i data-i="sheet"></i>
+              Importar Excel
+              <input type="file" id="impx" accept=".xlsx,.xls,.csv" hidden />
+            </label>
+            <label class="btn bs sm" style="margin: 0">
+              <i data-i="upload"></i>
+              Restaurar
+              <input type="file" id="imp" accept=".json" hidden />
+            </label>
+            <button class="btn bs sm" id="csv">
+              <i data-i="chart"></i>
+              Exportar CSV
+            </button>
+          </div>
+        </div>
+        <div class="card filters">
+          <div class="f fq">
+            <label>Buscar en todos los datos</label>
+            <input
+              type="text"
+              id="q"
+              placeholder="Dirección, manzana, especie, código (ej: BIO-04, R53)…"
+            />
+          </div>
+          <div class="f">
+            <label>Tipo</label>
+            <select id="ft">
+              <option value="">Todos</option>
+              <option value="croquis">Croquis perfil vial</option>
+              <option value="encuesta">Matriz VTA</option>
+              <option value="censo">Censo importado</option>
+            </select>
+          </div>
+          <div class="f">
+            <label>Manzana</label>
+            <select id="fm">
+              <option value="">Todas</option>
+            </select>
+          </div>
+          <div class="f">
+            <label>Especie</label>
+            <select id="fe">
+              <option value="">Todas</option>
+            </select>
+          </div>
+          <div class="f">
+            <label>Urgencia</label>
+            <select id="fu">
+              <option value="">Todas</option>
+            </select>
+          </div>
+          <div class="f">
+            <label>Desde</label>
+            <input type="date" id="fd1" />
+          </div>
+          <div class="f">
+            <label>Hasta</label>
+            <input type="date" id="fd2" />
+          </div>
+          <div class="f">
+            <label>Orden</label>
+            <select id="fo">
+              <option value="new">Más recientes</option>
+              <option value="old">Más antiguos</option>
+              <option value="dir">Dirección A–Z</option>
+              <option value="mz">Manzana</option>
+            </select>
+          </div>
+          <div class="f" style="justify-content: flex-end">
+            <button class="btn bs sm" id="fclr" type="button">
+              <i data-i="x"></i>
+              Limpiar filtros
+            </button>
+          </div>
+        </div>
+        <div class="rescount" id="rescount"></div>
+        <div class="card tbl" style="padding: 0">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Tipo</th>
+                <th>Dirección</th>
+                <th>Manzana</th>
+                <th>Detalle</th>
+                <th style="text-align: right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+        <nav class="pager" id="pager" aria-label="Paginación"></nav>
+        <p class="note">
+          <i data-i="info"></i>
+          Los registros se guardan en este dispositivo. En la tablet Android, abra la app en Chrome
+          y use el menú ⋮ → "Agregar a la pantalla principal" y haga un
+          <b>Respaldo</b>
+          periódico.
+        </p>
+      </section>
+    </main>
+    <div class="toast" id="toast"></div>
+    <div class="modal" id="modal">
+      <div class="mbox">
+        <div class="mhead">
+          <div>
+            <h3 id="mtitle"></h3>
+            <p id="msub"></p>
+          </div>
+          <button class="mclose" id="mclose" type="button" aria-label="Cerrar">
+            <i data-i="x"></i>
+          </button>
+        </div>
+        <div class="mbody" id="mbody"></div>
+        <div class="mfoot" id="mfoot"></div>
+      </div>
+    </div>
+
+    <script src="js/vendor/jspdf.umd.min.js"></script>
+    <script src="js/vendor/jspdf.plugin.autotable.min.js"></script>
+    <script src="js/icons.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/vendor/xlsx.full.min.js"></script>
+    <script src="js/encuesta.js"></script>
+    <script src="js/importar.js"></script>
+    <script src="js/db.js"></script>
+    <script src="js/gps.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/manzanas.js"></script>
+  </body>
+</html>
